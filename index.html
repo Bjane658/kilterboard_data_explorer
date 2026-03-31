@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kilter Board - Climbed Boulders</title>
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- PWA: iOS / iPhone support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kilter Board">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+
+    <!-- Theme color for browser chrome -->
+    <meta name="theme-color" content="#667eea">
     <style>
         * {
             margin: 0;
@@ -704,6 +716,14 @@
         document.getElementById('angleFilter').addEventListener('change', filterAndRender);
         document.getElementById('starsFilter').addEventListener('change', filterAndRender);
         document.getElementById('sortBy').addEventListener('change', filterAndRender);
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea"/>
+      <stop offset="100%" style="stop-color:#764ba2"/>
+    </linearGradient>
+  </defs>
+  <!-- Background with rounded corners for maskable icon safe zone -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- Stylized climbing hold shapes -->
+  <ellipse cx="256" cy="200" rx="60" ry="45" fill="white" opacity="0.95"/>
+  <ellipse cx="150" cy="310" rx="48" ry="36" fill="white" opacity="0.85"/>
+  <ellipse cx="362" cy="310" rx="48" ry="36" fill="white" opacity="0.85"/>
+  <ellipse cx="200" cy="400" rx="38" ry="28" fill="white" opacity="0.75"/>
+  <ellipse cx="312" cy="400" rx="38" ry="28" fill="white" opacity="0.75"/>
+  <!-- "KB" text label -->
+  <text x="256" y="490" font-family="Arial Black, Arial, sans-serif" font-size="56" font-weight="900" text-anchor="middle" fill="white" opacity="0.7" letter-spacing="4">KB</text>
+</svg>
