@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kilter Board - Climbed Boulders</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        .stat-card strong {
+            display: block;
+            font-size: 2rem;
+            margin-top: 5px;
+        }
+
+        .upload-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .upload-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .file-input-wrapper {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .file-input-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .file-name {
+            margin-top: 15px;
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 30px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .circuit-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .circuit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .circuit-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .circuit-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .circuit-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            flex: 1;
+        }
+
+        .circuit-badge {
+            background: #f0f0f0;
+            color: #666;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .circuit-climbs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .circuit-climb-item {
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            color: #333;
+            font-size: 0.95rem;
+            border-left: 3px solid #667eea;
+        }
+
+        .circuit-date {
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .controls {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        select {
+            padding: 8px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .climbs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .climb-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .climb-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .climb-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .climb-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            color: #666;
+        }
+
+        .climb-grade {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .climb-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 1.2rem;
+        }
+
+        .no-results {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .climbs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Kilter Board Climbs</h1>
+            <p class="subtitle">Your climbing history from the old app</p>
+            <div class="stats">
+                <div class="stat-card">
+                    <span>Total Climbs</span>
+                    <strong id="totalClimbs">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Unique Boulders</span>
+                    <strong id="uniqueBoulders">0</strong>
+                </div>
+            </div>
+        </header>
+
+        <div id="uploadSection" class="upload-section">
+            <h2>Upload Your Climb Data</h2>
+            <p class="subtitle">Select your export JSON file to view your climbing history</p>
+            <div class="file-input-wrapper">
+                <input type="file" id="fileInput" accept=".json" />
+                <label for="fileInput" class="file-input-label">Choose File</label>
+            </div>
+            <div id="fileName" class="file-name"></div>
+        </div>
+
+        <div id="tabsSection" class="tabs hidden">
+            <button class="tab active" data-tab="ascents">My Climbs</button>
+            <button class="tab" data-tab="circuits">Circuits</button>
+        </div>
+
+        <div id="controlsSection" class="controls hidden">
+            <input
+                type="text"
+                id="searchBox"
+                class="search-box"
+                placeholder="Search by boulder name..."
+            >
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="gradeFilter">Grade:</label>
+                    <select id="gradeFilter">
+                        <option value="">All Grades</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="angleFilter">Angle:</label>
+                    <select id="angleFilter">
+                        <option value="">All Angles</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="starsFilter">Min Stars:</label>
+                    <select id="starsFilter">
+                        <option value="">Any</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sortBy">Sort by:</label>
+                    <select id="sortBy">
+                        <option value="recent">Most Recent</option>
+                        <option value="name">Name (A-Z)</option>
+                        <option value="grade">Grade</option>
+                        <option value="stars">Stars</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="climbsContainer" class="climbs-grid"></div>
+    </div>
+
+    <script>
+        let allClimbs = [];
+        let filteredClimbs = [];
+        let allCircuits = [];
+        let currentTab = 'ascents';
+
+        // Handle file upload
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            document.getElementById('fileName').textContent = `Loading ${file.name}...`;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    loadData(data);
+                    document.getElementById('fileName').textContent = `Loaded: ${file.name}`;
+                    document.getElementById('uploadSection').classList.add('hidden');
+                    document.getElementById('tabsSection').classList.remove('hidden');
+                    document.getElementById('controlsSection').classList.remove('hidden');
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    document.getElementById('fileName').textContent = 'Error: Invalid JSON file';
+                    document.getElementById('fileName').style.color = 'red';
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                currentTab = this.dataset.tab;
+
+                if (currentTab === 'ascents') {
+                    document.getElementById('controlsSection').classList.remove('hidden');
+                    filterAndRender();
+                } else {
+                    document.getElementById('controlsSection').classList.add('hidden');
+                    renderCircuits();
+                }
+            });
+        });
+
+        // Load the data
+        function loadData(data) {
+            allClimbs = data.ascents || [];
+            allCircuits = data.circuits || [];
+
+            // Update stats
+            document.getElementById('totalClimbs').textContent =
+                allClimbs.reduce((sum, climb) => sum + (climb.count || 1), 0);
+            document.getElementById('uniqueBoulders').textContent = allClimbs.length;
+
+            // Populate filters
+            populateFilters();
+
+            // Initial render
+            filterAndRender();
+        }
+
+        function populateFilters() {
+            // Get unique grades
+            const grades = [...new Set(allClimbs.map(c => c.grade).filter(Boolean))].sort();
+            const gradeFilter = document.getElementById('gradeFilter');
+            grades.forEach(grade => {
+                const option = document.createElement('option');
+                option.value = grade;
+                option.textContent = grade;
+                gradeFilter.appendChild(option);
+            });
+
+            // Get unique angles
+            const angles = [...new Set(allClimbs.map(c => c.angle).filter(Boolean))].sort((a, b) => a - b);
+            const angleFilter = document.getElementById('angleFilter');
+            angles.forEach(angle => {
+                const option = document.createElement('option');
+                option.value = angle;
+                option.textContent = angle + '°';
+                angleFilter.appendChild(option);
+            });
+        }
+
+        function filterAndRender() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const gradeFilter = document.getElementById('gradeFilter').value;
+            const angleFilter = document.getElementById('angleFilter').value;
+            const starsFilter = document.getElementById('starsFilter').value;
+            const sortBy = document.getElementById('sortBy').value;
+
+            // Filter climbs
+            filteredClimbs = allClimbs.filter(climb => {
+                const matchesSearch = !searchTerm ||
+                    (climb.climb && climb.climb.toLowerCase().includes(searchTerm));
+                const matchesGrade = !gradeFilter || climb.grade === gradeFilter;
+                const matchesAngle = !angleFilter || climb.angle == angleFilter;
+                const matchesStars = !starsFilter ||
+                    (climb.stars >= parseInt(starsFilter));
+
+                return matchesSearch && matchesGrade && matchesAngle && matchesStars;
+            });
+
+            // Sort climbs
+            switch(sortBy) {
+                case 'name':
+                    filteredClimbs.sort((a, b) =>
+                        (a.climb || '').localeCompare(b.climb || ''));
+                    break;
+                case 'grade':
+                    filteredClimbs.sort((a, b) =>
+                        (a.grade || '').localeCompare(b.grade || ''));
+                    break;
+                case 'stars':
+                    filteredClimbs.sort((a, b) => (b.stars || 0) - (a.stars || 0));
+                    break;
+                case 'recent':
+                default:
+                    filteredClimbs.sort((a, b) =>
+                        new Date(b.climbed_at) - new Date(a.climbed_at));
+            }
+
+            renderClimbs();
+        }
+
+        function renderClimbs() {
+            const container = document.getElementById('climbsContainer');
+
+            if (filteredClimbs.length === 0) {
+                container.innerHTML = '<div class="no-results">No climbs found matching your filters.</div>';
+                return;
+            }
+
+            container.innerHTML = filteredClimbs.map(climb => `
+                <div class="climb-card">
+                    <div class="climb-name">${climb.climb || 'Unnamed'}</div>
+                    <div class="climb-info">
+                        <div>
+                            <span class="climb-grade">${climb.grade || 'N/A'}</span>
+                        </div>
+                        <div class="climb-detail">
+                            <strong>Angle:</strong> ${climb.angle || 'N/A'}°
+                        </div>
+                        <div class="climb-detail">
+                            <strong>Climbed:</strong> ${climb.count || 1}x
+                        </div>
+                        ${climb.stars ? `
+                        <div class="climb-detail">
+                            <span class="stars">${'★'.repeat(climb.stars)}${'☆'.repeat(3 - climb.stars)}</span>
+                        </div>
+                        ` : ''}
+                        <div class="climb-detail">
+                            <strong>Date:</strong> ${new Date(climb.climbed_at).toLocaleDateString()}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCircuits() {
+            const container = document.getElementById('climbsContainer');
+
+            if (allCircuits.length === 0) {
+                container.innerHTML = '<div class="no-results">No circuits found.</div>';
+                return;
+            }
+
+            container.innerHTML = allCircuits.map(circuit => `
+                <div class="circuit-card">
+                    <div class="circuit-header">
+                        <div class="circuit-color" style="background-color: #${circuit.color || '808080'}"></div>
+                        <div class="circuit-name">${circuit.name || 'Unnamed Circuit'}</div>
+                        <div class="circuit-badge">${circuit.climbs ? circuit.climbs.length : 0} climbs</div>
+                    </div>
+                    ${circuit.is_private ? '<div style="color: #999; font-size: 0.9rem; margin-bottom: 10px;">🔒 Private</div>' : ''}
+                    <div class="circuit-climbs">
+                        ${circuit.climbs ? circuit.climbs.map(climb => `
+                            <div class="circuit-climb-item">${climb}</div>
+                        `).join('') : '<div class="no-results">No climbs in this circuit</div>'}
+                    </div>
+                    <div class="circuit-date">Created: ${new Date(circuit.created_at).toLocaleDateString()}</div>
+                </div>
+            `).join('');
+        }
+
+        // Event listeners
+        document.getElementById('searchBox').addEventListener('input', filterAndRender);
+        document.getElementById('gradeFilter').addEventListener('change', filterAndRender);
+        document.getElementById('angleFilter').addEventListener('change', filterAndRender);
+        document.getElementById('starsFilter').addEventListener('change', filterAndRender);
+        document.getElementById('sortBy').addEventListener('change', filterAndRender);
+    </script>
+</body>
+</html>
